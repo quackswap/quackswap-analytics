@@ -21,4 +21,4 @@ RUN yarn build
 FROM nginx
 
 COPY --from=build /usr/info/build /usr/www
-COPY devops/nginx.conf /etc/nginx/nginx.conf
+COPY operations/app/nginx.conf /etc/nginx/nginx.conf
