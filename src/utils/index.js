@@ -45,13 +45,13 @@ export function getPoolLink(token0Address, token1Address = null, remove = false)
     return (
       `${QUACKSWAP_LINK}` +
       (remove ? `remove#/remove` : `add#/add`) +
-      `/${token0Address === '0xD827bA08b294c17D4C42231f516c60E6eF9772A3' ? 'BTT' : token0Address}/${'BTT'}`
+      `/${token0Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token0Address}/${'BTT'}`
     )
   } else {
     return (
       `${QUACKSWAP_LINK}` +
       (remove ? `remove#/remove` : `add#/add`) +
-      `/${token0Address === '0xD827bA08b294c17D4C42231f516c60E6eF9772A3' ? 'BTT' : token0Address}/${token1Address === '0xD827bA08b294c17D4C42231f516c60E6eF9772A3' ? 'BTT' : token1Address
+      `/${token0Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token0Address}/${token1Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token1Address
       }`
     )
   }
@@ -61,8 +61,8 @@ export function getSwapLink(token0Address, token1Address = null) {
   if (!token1Address) {
     return `${QUACKSWAP_LINK}/#/swap?inputCurrency=${token0Address}`
   } else {
-    return `${QUACKSWAP_LINK}/#/swap?inputCurrency=${token0Address === '0xD827bA08b294c17D4C42231f516c60E6eF9772A3' ? 'BTT' : token0Address
-      }&outputCurrency=${token1Address === '0xD827bA08b294c17D4C42231f516c60E6eF9772A3' ? 'BTT' : token1Address}`
+    return `${QUACKSWAP_LINK}/#/swap?inputCurrency=${token0Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token0Address
+      }&outputCurrency=${token1Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token1Address}`
   }
 }
 
