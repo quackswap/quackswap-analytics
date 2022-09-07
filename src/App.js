@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import { ApolloProvider } from 'react-apollo'
-import { client } from './apollo/client'
-import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom'
+import {ApolloProvider} from 'react-apollo'
+import {client} from './apollo/client'
+import {Route, Switch, BrowserRouter, Redirect} from 'react-router-dom'
 import GlobalPage from './pages/GlobalPage'
 import TokenPage from './pages/TokenPage'
 import PairPage from './pages/PairPage'
-import { useGlobalData, useGlobalChartData } from './contexts/GlobalData'
-import { isAddress } from './utils'
+import {useGlobalData, useGlobalChartData} from './contexts/GlobalData'
+import {isAddress} from './utils'
 import AccountPage from './pages/AccountPage'
 import AllTokensPage from './pages/AllTokensPage'
 import AllPairsPage from './pages/AllPairsPage'
@@ -16,9 +16,9 @@ import PinnedData from './components/PinnedData'
 import SideNav from './components/SideNav'
 import AccountLookup from './pages/AccountLookup'
 import LocalLoader from './components/LocalLoader'
-import { useLatestBlocks } from './contexts/Application'
+import {useLatestBlocks} from './contexts/Application'
 import GoogleAnalyticsReporter from './components/analytics/GoogleAnalyticsReporter'
-import { PAIR_BLACKLIST, TOKEN_BLACKLIST } from './constants'
+import {PAIR_BLACKLIST, TOKEN_BLACKLIST} from './constants'
 
 const AppWrapper = styled.div`
   position: relative;
@@ -26,7 +26,7 @@ const AppWrapper = styled.div`
 `
 const ContentWrapper = styled.div`
   display: grid;
-  grid-template-columns: ${({ open }) => (open ? '220px 1fr 200px' : '220px 1fr 64px')};
+  grid-template-columns: ${({open}) => (open ? '220px 1fr 200px' : '220px 1fr 64px')};
 
   @media screen and (max-width: 1400px) {
     grid-template-columns: 220px 1fr;
@@ -45,10 +45,10 @@ const Right = styled.div`
   right: 0;
   bottom: 0rem;
   z-index: 99;
-  width: ${({ open }) => (open ? '220px' : '64px')};
-  height: ${({ open }) => (open ? 'fit-content' : '64px')};
+  width: ${({open}) => (open ? '220px' : '64px')};
+  height: ${({open}) => (open ? 'fit-content' : '64px')};
   overflow: auto;
-  background-color: ${({ theme }) => theme.bg1};
+  background-color: ${({theme}) => theme.bg1};
   @media screen and (max-width: 1400px) {
     display: none;
   }
@@ -58,7 +58,7 @@ const Center = styled.div`
   height: 100%;
   z-index: 9999;
   transition: width 0.25s ease;
-  background-color: ${({ theme }) => theme.onlyLight};
+  background-color: ${({theme}) => theme.onlyLight};
 `
 
 const WarningWrapper = styled.div`
@@ -79,7 +79,7 @@ const WarningBanner = styled.div`
 /**
  * Wrap the component with the header and sidebar pinned tab
  */
-const LayoutWrapper = ({ children, savedOpen, setSavedOpen }) => {
+const LayoutWrapper = ({children, savedOpen, setSavedOpen}) => {
   return (
     <>
       <ContentWrapper open={savedOpen}>
@@ -111,7 +111,7 @@ function App() {
         {showWarning && (
           <WarningWrapper>
             <WarningBanner>
-              {`Warning: The data on this site has only synced to Ethereum block ${latestBlock} (out of ${headBlock}). Please check back soon.`}
+              {`Warning: The data on this site has only synced to BitTorrent block ${latestBlock} (out of ${headBlock}). Please check back soon.`}
             </WarningBanner>
           </WarningWrapper>
         )}
@@ -126,8 +126,8 @@ function App() {
                 exacts
                 strict
                 path="/token/:tokenAddress"
-                render={({ match }) => {
-                  if (
+                render={({match}) => {
+                  if(
                     isAddress(match.params.tokenAddress.toLowerCase()) &&
                     !Object.keys(TOKEN_BLACKLIST).includes(match.params.tokenAddress.toLowerCase())
                   ) {
@@ -145,8 +145,8 @@ function App() {
                 exacts
                 strict
                 path="/pair/:pairAddress"
-                render={({ match }) => {
-                  if (
+                render={({match}) => {
+                  if(
                     isAddress(match.params.pairAddress.toLowerCase()) &&
                     !Object.keys(PAIR_BLACKLIST).includes(match.params.pairAddress.toLowerCase())
                   ) {
@@ -164,8 +164,8 @@ function App() {
                 exacts
                 strict
                 path="/account/:accountAddress"
-                render={({ match }) => {
-                  if (isAddress(match.params.accountAddress.toLowerCase())) {
+                render={({match}) => {
+                  if(isAddress(match.params.accountAddress.toLowerCase())) {
                     return (
                       <LayoutWrapper savedOpen={savedOpen} setSavedOpen={setSavedOpen}>
                         <AccountPage account={match.params.accountAddress.toLowerCase()} />

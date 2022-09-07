@@ -1,14 +1,14 @@
 import React from 'react'
 import 'feather-icons'
 import styled from 'styled-components'
-import { Text } from 'rebass'
-import { AlertTriangle } from 'react-feather'
-import { RowBetween, RowFixed } from '../Row'
-import { ButtonDark } from '../ButtonStyled'
-import { AutoColumn } from '../Column'
-import { Hover } from '..'
+import {Text} from 'rebass'
+import {AlertTriangle} from 'react-feather'
+import {RowBetween, RowFixed} from '../Row'
+import {ButtonDark} from '../ButtonStyled'
+import {AutoColumn} from '../Column'
+import {Hover} from '..'
 import Link from '../Link'
-import { useMedia } from 'react-use'
+import {useMedia} from 'react-use'
 
 const WarningWrapper = styled.div`
   border-radius: 20px;
@@ -16,7 +16,7 @@ const WarningWrapper = styled.div`
   background: rgba(248, 45, 58, 0.05);
   padding: 1rem;
   color: #f82d3a;
-  display: ${({ show }) => !show && 'none'};
+  display: ${({show}) => !show && 'none'};
   margin: 0 2rem 2rem 2rem;
   position: relative;
 
@@ -32,13 +32,13 @@ const StyledWarningIcon = styled(AlertTriangle)`
   stroke: red;
 `
 
-export default function Warning({ type, show, setShow, address }) {
+export default function Warning({type, show, setShow, address}) {
   const below800 = useMedia('(max-width: 800px)')
 
   const textContent = below800 ? (
     <div>
       <Text fontWeight={500} lineHeight={'145.23%'} mt={'10px'}>
-        Anyone can create and name any ERC20 token on Ethereum, including creating fake versions of existing tokens and
+        Anyone can create and name any ERC20 token on BitTorrent, including creating fake versions of existing tokens and
         tokens that claim to represent projects that do not have a token.
       </Text>
       <Text fontWeight={500} lineHeight={'145.23%'} mt={'10px'}>
@@ -48,7 +48,7 @@ export default function Warning({ type, show, setShow, address }) {
     </div>
   ) : (
     <Text fontWeight={500} lineHeight={'145.23%'} mt={'10px'}>
-      Anyone can create and name any ERC20 token on Ethereum, including creating fake versions of existing tokens and
+      Anyone can create and name any ERC20 token on BitTorrent, including creating fake versions of existing tokens and
       tokens that claim to represent projects that do not have a token. Similar to BTTCScan, this site automatically
       tracks analytics for all ERC20 tokens independent of token integrity. Please do your own research before
       interacting with any ERC20 token.
@@ -67,7 +67,7 @@ export default function Warning({ type, show, setShow, address }) {
         {textContent}
         {below800 ? (
           <div>
-            <Hover style={{ marginTop: '10px' }}>
+            <Hover style={{marginTop: '10px'}}>
               <Link
                 fontWeight={500}
                 lineHeight={'145.23%'}
@@ -78,15 +78,15 @@ export default function Warning({ type, show, setShow, address }) {
                 View {type === 'token' ? 'token' : 'pair'} contract on BTTCScan
               </Link>
             </Hover>
-            <RowBetween style={{ marginTop: '20px' }}>
+            <RowBetween style={{marginTop: '20px'}}>
               <div />
-              <ButtonDark color={'#f82d3a'} style={{ minWidth: '140px' }} onClick={() => setShow(false)}>
+              <ButtonDark color={'#f82d3a'} style={{minWidth: '140px'}} onClick={() => setShow(false)}>
                 I understand
               </ButtonDark>
             </RowBetween>
           </div>
         ) : (
-          <RowBetween style={{ marginTop: '10px' }}>
+          <RowBetween style={{marginTop: '10px'}}>
             <Hover>
               <Link
                 fontWeight={500}
@@ -98,7 +98,7 @@ export default function Warning({ type, show, setShow, address }) {
                 View {type === 'token' ? 'token' : 'pair'} contract on BTTCScan
               </Link>
             </Hover>
-            <ButtonDark color={'#f82d3a'} style={{ minWidth: '140px' }} onClick={() => setShow(false)}>
+            <ButtonDark color={'#f82d3a'} style={{minWidth: '140px'}} onClick={() => setShow(false)}>
               I understand
             </ButtonDark>
           </RowBetween>
