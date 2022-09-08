@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { FACTORY_ADDRESS, BUNDLE_ID } from '../constants'
+import {FACTORY_ADDRESS, BUNDLE_ID} from '../constants'
 
 export const SUBGRAPH_HEALTH = gql`
   query health {
@@ -436,7 +436,7 @@ export const GLOBAL_DATA = (block) => {
   const queryString = ` query quackSwapFactories {
       quackSwapFactories(
        ${block ? `block: { number: ${block}}` : ``} 
-       where: { id: "${FACTORY_ADDRESS}" }) {
+       where: { id: "${FACTORY_ADDRESS.toLowerCase()}" }) {
         id
         totalVolumeUSD
         totalVolumeETH
