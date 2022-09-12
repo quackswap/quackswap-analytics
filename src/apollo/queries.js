@@ -61,6 +61,18 @@ export const GET_BLOCK = gql`
   }
 `
 
+export const LATEST_BLOCK_QUERY = gql`
+  query blocks {
+    blocks(
+      first: 1
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      number
+    }
+  }
+`
+
 export const GET_BLOCKS = (timestamps) => {
   let queryString = 'query blocks {'
   queryString += timestamps.map((timestamp) => {
