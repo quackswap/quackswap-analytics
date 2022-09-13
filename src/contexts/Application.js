@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useReducer, useMemo, useCallback, useState, useEffect } from 'react'
-import { timeframeOptions, SUPPORTED_LIST_URLS__NO_ENS } from '../constants'
+import React, {createContext, useContext, useReducer, useMemo, useCallback, useState, useEffect} from 'react'
+import {timeframeOptions, SUPPORTED_LIST_URLS__NO_ENS} from '../constants'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import getTokenList from '../utils/tokenLists'
-import { healthClient } from '../apollo/client'
-import { SUBGRAPH_HEALTH } from '../apollo/queries'
+import {blockClient} from '../apollo/client'
+import {LATEST_BLOCK_QUERY} from '../apollo/queries'
+import {getProvider} from '../utils/provider'
 dayjs.extend(utc)
 
 const UPDATE = 'UPDATE'
@@ -27,24 +28,24 @@ function useApplicationContext() {
   return useContext(ApplicationContext)
 }
 
-function reducer(state, { type, payload }) {
-  switch (type) {
+function reducer(state, {type, payload}) {
+  switch(type) {
     case UPDATE: {
-      const { currency } = payload
+      const {currency} = payload
       return {
         ...state,
         [CURRENCY]: currency,
       }
     }
     case UPDATE_TIMEFRAME: {
-      const { newTimeFrame } = payload
+      const {newTimeFrame} = payload
       return {
         ...state,
         [TIME_KEY]: newTimeFrame,
       }
     }
     case UPDATE_SESSION_START: {
-      const { timestamp } = payload
+      const {timestamp} = payload
       return {
         ...state,
         [SESSION_START]: timestamp,
@@ -52,7 +53,7 @@ function reducer(state, { type, payload }) {
     }
 
     case UPDATE_LATEST_BLOCK: {
-      const { block } = payload
+      const {block} = payload
       return {
         ...state,
         [LATEST_BLOCK]: block,
@@ -60,7 +61,7 @@ function reducer(state, { type, payload }) {
     }
 
     case UPDATE_HEAD_BLOCK: {
-      const { block } = payload
+      const {block} = payload
       return {
         ...state,
         [HEAD_BLOCK]: block,
@@ -68,7 +69,7 @@ function reducer(state, { type, payload }) {
     }
 
     case UPDATED_SUPPORTED_TOKENS: {
-      const { supportedTokens } = payload
+      const {supportedTokens} = payload
       return {
         ...state,
         [SUPPORTED_TOKENS]: supportedTokens,
@@ -86,7 +87,7 @@ const INITIAL_STATE = {
   TIME_KEY: timeframeOptions.ALL_TIME,
 }
 
-export default function Provider({ children }) {
+export default function Provider({children}) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
   const update = useCallback((currency) => {
     dispatch({
@@ -167,30 +168,29 @@ export default function Provider({ children }) {
 }
 
 export function useLatestBlocks() {
-  const [state, { updateLatestBlock, updateHeadBlock }] = useApplicationContext()
+  const [state, {updateLatestBlock, updateHeadBlock}] = useApplicationContext()
 
   const latestBlock = state?.[LATEST_BLOCK]
   const headBlock = state?.[HEAD_BLOCK]
 
   useEffect(() => {
     async function fetch() {
-      healthClient
-        .query({
-          query: SUBGRAPH_HEALTH,
-        })
-        .then((res) => {
-          const syncedBlock = res.data.indexingStatusForCurrentVersion.chains[0].latestBlock.number
-          const headBlock = res.data.indexingStatusForCurrentVersion.chains[0].chainHeadBlock.number
-          if (syncedBlock && headBlock) {
-            updateLatestBlock(syncedBlock)
-            updateHeadBlock(headBlock)
-          }
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+      try {
+        const latestBlock = await getProvider().getBlockNumber()
+        const res = await blockClient.query({query: LATEST_BLOCK_QUERY})
+
+        const syncedBlock = res.data.blocks[0].number
+
+        if(latestBlock && syncedBlock) {
+          updateLatestBlock(syncedBlock)
+          updateHeadBlock(latestBlock)
+        }
+      } catch(err) {
+        console.log(err)
+      }
     }
-    if (!latestBlock) {
+
+    if(!latestBlock) {
       fetch()
     }
   }, [latestBlock, updateHeadBlock, updateLatestBlock])
@@ -199,9 +199,9 @@ export function useLatestBlocks() {
 }
 
 export function useCurrentCurrency() {
-  const [state, { update }] = useApplicationContext()
+  const [state, {update}] = useApplicationContext()
   const toggleCurrency = useCallback(() => {
-    if (state.currency === 'ETH') {
+    if(state.currency === 'ETH') {
       update('USD')
     } else {
       update('ETH')
@@ -211,7 +211,7 @@ export function useCurrentCurrency() {
 }
 
 export function useTimeframe() {
-  const [state, { updateTimeframe }] = useApplicationContext()
+  const [state, {updateTimeframe}] = useApplicationContext()
   const activeTimeframe = state?.[`TIME_KEY`]
   return [activeTimeframe, updateTimeframe]
 }
@@ -240,11 +240,11 @@ export function useStartTimestamp() {
 
 // keep track of session length for refresh ticker
 export function useSessionStart() {
-  const [state, { updateSessionStart }] = useApplicationContext()
+  const [state, {updateSessionStart}] = useApplicationContext()
   const sessionStart = state?.[SESSION_START]
 
   useEffect(() => {
-    if (!sessionStart) {
+    if(!sessionStart) {
       updateSessionStart(Date.now())
     }
   })
@@ -264,7 +264,7 @@ export function useSessionStart() {
 }
 
 export function useListedTokens() {
-  const [state, { updateSupportedTokens }] = useApplicationContext()
+  const [state, {updateSupportedTokens}] = useApplicationContext()
   const supportedTokens = state?.[SUPPORTED_TOKENS]
 
   useEffect(() => {
@@ -272,14 +272,14 @@ export function useListedTokens() {
       const allFetched = await SUPPORTED_LIST_URLS__NO_ENS.reduce(async (fetchedTokens, url) => {
         const tokensSoFar = await fetchedTokens
         const newTokens = await getTokenList(url)
-        if (newTokens?.tokens) {
+        if(newTokens?.tokens) {
           return Promise.resolve([...tokensSoFar, ...newTokens.tokens])
         }
       }, Promise.resolve([]))
       let formatted = allFetched?.map((t) => t.address.toLowerCase())
       updateSupportedTokens(formatted)
     }
-    if (!supportedTokens) {
+    if(!supportedTokens) {
       try {
         fetchList()
       } catch {

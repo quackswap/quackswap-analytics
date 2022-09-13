@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { FACTORY_ADDRESS, BUNDLE_ID } from '../constants'
+import {FACTORY_ADDRESS, BUNDLE_ID} from '../constants'
 
 export const SUBGRAPH_HEALTH = gql`
   query health {
@@ -57,6 +57,18 @@ export const GET_BLOCK = gql`
       id
       number
       timestamp
+    }
+  }
+`
+
+export const LATEST_BLOCK_QUERY = gql`
+  query blocks {
+    blocks(
+      first: 1
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      number
     }
   }
 `
@@ -436,7 +448,7 @@ export const GLOBAL_DATA = (block) => {
   const queryString = ` query quackSwapFactories {
       quackSwapFactories(
        ${block ? `block: { number: ${block}}` : ``} 
-       where: { id: "${FACTORY_ADDRESS}" }) {
+       where: { id: "${FACTORY_ADDRESS.toLowerCase()}" }) {
         id
         totalVolumeUSD
         totalVolumeETH
