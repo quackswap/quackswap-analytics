@@ -4,6 +4,7 @@
   "homepage": "https://info.quackswap.com",
   "devDependencies": {
     "@popperjs/core": "^2.4.2",
+    "@quackswap/token-lists": "1.0.0",
     "@reach/portal": "^0.10.3",
     "@reach/router": "^1.2.1",
     "@types/jest": "^26.0.0",
@@ -13,7 +14,6 @@
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
-    "@apocentre/token-lists": "1.0.2",
     "ajv": "^6.12.4",
     "animated-number-react": "^0.1.1",
     "apollo-cache-inmemory": "^1.6.3",
@@ -88,5 +88,8 @@
       "last 1 safari version"
     ]
   },
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@ethersproject/providers": "^5.7.1"
+  }
 }
