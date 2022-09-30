@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http'
 
 export const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://graph.hotcross.dev/subgraphs/name/bttc-dex',
+    uri: 'https://graph.quackswap.xyz/subgraphs/name/bttc-dex',
   }),
   cache: new InMemoryCache(),
   shouldBatch: true,
@@ -36,7 +36,7 @@ export const stakingClient = new ApolloClient({
 
 export const blockClient = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://graph.hotcross.dev/subgraphs/name/bttc-blocks',
+    uri: 'https://graph.quackswap.xyz/subgraphs/name/bttc-blocks',
   }),
   cache: new InMemoryCache(),
 })
