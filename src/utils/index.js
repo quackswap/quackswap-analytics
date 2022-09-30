@@ -1,28 +1,28 @@
 import React from 'react'
-import {BigNumber} from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import dayjs from 'dayjs'
-import {ethers} from 'ethers'
+import { ethers } from 'ethers'
 import utc from 'dayjs/plugin/utc'
-import {client, blockClient} from '../apollo/client'
-import {GET_BLOCK, GET_BLOCKS, SHARE_VALUE} from '../apollo/queries'
-import {Text} from 'rebass'
+import { client, blockClient } from '../apollo/client'
+import { GET_BLOCK, GET_BLOCKS, SHARE_VALUE } from '../apollo/queries'
+import { Text } from 'rebass'
 import _Decimal from 'decimal.js-light'
 import toFormat from 'toformat'
-import {timeframeOptions} from '../constants'
+import { timeframeOptions } from '../constants'
 import Numeral from 'numeral'
 
 const QUACKSWAP_LINK = process.env.REACT_APP_QUACKSWAP_LINK
 
 // format libraries
 const Decimal = toFormat(_Decimal)
-BigNumber.set({EXPONENTIAL_AT: 50})
+BigNumber.set({ EXPONENTIAL_AT: 50 })
 dayjs.extend(utc)
 
 export function getTimeframe(timeWindow) {
   const utcEndTime = dayjs.utc()
   // based on window, get starttime
   let utcStartTime
-  switch(timeWindow) {
+  switch (timeWindow) {
     case timeframeOptions.WEEK:
       utcStartTime = utcEndTime.subtract(1, 'week').endOf('day').unix() - 1
       break
@@ -40,28 +40,28 @@ export function getTimeframe(timeWindow) {
 }
 
 export function getPoolLink(token0Address, token1Address = null, remove = false) {
-  if(!token1Address) {
+  if (!token1Address) {
     return (
       `${QUACKSWAP_LINK}` +
       (remove ? `remove#/remove` : `add#/add`) +
-      `/${token0Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token0Address}/${'BTT'}`
+      `/${token0Address === '0x8D193c6efa90BCFf940A98785d1Ce9D093d3DC8A' ? 'BTT' : token0Address}/${'BTT'}`
     )
   } else {
     return (
       `${QUACKSWAP_LINK}` +
       (remove ? `remove#/remove` : `add#/add`) +
-      `/${token0Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token0Address}/${token1Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token1Address
+      `/${token0Address === '0x8D193c6efa90BCFf940A98785d1Ce9D093d3DC8A' ? 'BTT' : token0Address}/${token1Address === '0x8D193c6efa90BCFf940A98785d1Ce9D093d3DC8A' ? 'BTT' : token1Address
       }`
     )
   }
 }
 
 export function getSwapLink(token0Address, token1Address = null) {
-  if(!token1Address) {
+  if (!token1Address) {
     return `${QUACKSWAP_LINK}/#/swap?inputCurrency=${token0Address}`
   } else {
-    return `${QUACKSWAP_LINK}/#/swap?inputCurrency=${token0Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token0Address
-      }&outputCurrency=${token1Address === '0x7268a734aA5fd513a475A8C6853F0154BBbe9F45' ? 'BTT' : token1Address}`
+    return `${QUACKSWAP_LINK}/#/swap?inputCurrency=${token0Address === '0x8D193c6efa90BCFf940A98785d1Ce9D093d3DC8A' ? 'BTT' : token0Address
+      }&outputCurrency=${token1Address === '0x8D193c6efa90BCFf940A98785d1Ce9D093d3DC8A' ? 'BTT' : token1Address}`
   }
 }
 
@@ -71,7 +71,7 @@ export function getMiningPoolLink(token0Address) {
 
 export function getUniswapAppLink(linkVariable) {
   let baseUniswapUrl = QUACKSWAP_LINK
-  if(!linkVariable) {
+  if (!linkVariable) {
     return baseUniswapUrl
   }
 
@@ -90,7 +90,7 @@ export const toNiceDate = (date) => {
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end
 export function shortenAddress(address, chars = 4) {
   const parsed = isAddress(address)
-  if(!parsed) {
+  if (!parsed) {
     throw Error(`Invalid 'address' parameter '${address}'.`)
   }
   return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`
@@ -119,9 +119,9 @@ export async function splitQuery(query, localClient, vars, list, skipCount = 100
   let allFound = false
   let skip = 0
 
-  while(!allFound) {
+  while (!allFound) {
     let end = list.length
-    if(skip + skipCount < list.length) {
+    if (skip + skipCount < list.length) {
       end = skip + skipCount
     }
     let sliced = list.slice(skip, end)
@@ -133,7 +133,7 @@ export async function splitQuery(query, localClient, vars, list, skipCount = 100
       ...fetchedData,
       ...result.data,
     }
-    if(Object.keys(result.data).length < skipCount || skip + skipCount > list.length) {
+    if (Object.keys(result.data).length < skipCount || skip + skipCount > list.length) {
       allFound = true
     } else {
       skip += skipCount
@@ -168,16 +168,16 @@ export async function getBlockFromTimestamp(timestamp) {
  * @param {Array} timestamps
  */
 export async function getBlocksFromTimestamps(timestamps, skipCount = 500) {
-  if(timestamps?.length === 0) {
+  if (timestamps?.length === 0) {
     return []
   }
 
   let fetchedData = await splitQuery(GET_BLOCKS, blockClient, [], timestamps, skipCount)
 
   let blocks = []
-  if(fetchedData) {
-    for(var t in fetchedData) {
-      if(fetchedData[t].length > 0) {
+  if (fetchedData) {
+    for (var t in fetchedData) {
+      if (fetchedData[t].length > 0) {
         blocks.push({
           timestamp: t.split('t')[1],
           number: fetchedData[t][0]['number'],
@@ -219,7 +219,7 @@ export async function getBlocksFromTimestamps(timestamps, skipCount = 500) {
  * @param {Array} timestamps
  */
 export async function getShareValueOverTime(pairAddress, timestamps) {
-  if(!timestamps) {
+  if (!timestamps) {
     const utcCurrentTime = dayjs()
     const utcSevenDaysBack = utcCurrentTime.subtract(8, 'day').unix()
     timestamps = getTimestampRange(utcSevenDaysBack, 86400, 7)
@@ -235,10 +235,10 @@ export async function getShareValueOverTime(pairAddress, timestamps) {
   })
 
   let values = []
-  for(var row in result?.data) {
+  for (var row in result?.data) {
     let timestamp = row.split('t')[1]
     let sharePriceUsd = parseFloat(result.data[row]?.reserveUSD) / parseFloat(result.data[row]?.totalSupply)
-    if(timestamp) {
+    if (timestamp) {
       values.push({
         timestamp,
         sharePriceUsd,
@@ -258,9 +258,9 @@ export async function getShareValueOverTime(pairAddress, timestamps) {
 
   // add eth prices
   let index = 0
-  for(var brow in result?.data) {
+  for (var brow in result?.data) {
     let timestamp = brow.split('b')[1]
-    if(timestamp) {
+    if (timestamp) {
       values[index].ethPrice = result.data[brow].ethPrice
       values[index].token0PriceUSD = result.data[brow].ethPrice * values[index].token0DerivedETH
       values[index].token1PriceUSD = result.data[brow].ethPrice * values[index].token1DerivedETH
@@ -280,7 +280,7 @@ export async function getShareValueOverTime(pairAddress, timestamps) {
  */
 export function getTimestampRange(timestamp_from, period_length, periods) {
   let timestamps = []
-  for(let i = 0; i <= periods; i++) {
+  for (let i = 0; i <= periods; i++) {
     timestamps.push(timestamp_from + i * period_length)
   }
   return timestamps
@@ -320,11 +320,11 @@ export const formatTime = (unix) => {
   const inHours = now.diff(timestamp, 'hour')
   const inDays = now.diff(timestamp, 'day')
 
-  if(inHours >= 24) {
+  if (inHours >= 24) {
     return `${inDays} ${inDays === 1 ? 'day' : 'days'} ago`
-  } else if(inMinutes >= 60) {
+  } else if (inMinutes >= 60) {
     return `${inHours} ${inHours === 1 ? 'hour' : 'hours'} ago`
-  } else if(inSeconds >= 60) {
+  } else if (inSeconds >= 60) {
     return `${inMinutes} ${inMinutes === 1 ? 'minute' : 'minutes'} ago`
   } else {
     return `${inSeconds} ${inSeconds === 1 ? 'second' : 'seconds'} ago`
@@ -347,38 +347,38 @@ export const formatDollarAmount = (num, digits) => {
 }
 
 export const toSignificant = (number, significantDigits) => {
-  Decimal.set({precision: significantDigits + 1, rounding: Decimal.ROUND_UP})
+  Decimal.set({ precision: significantDigits + 1, rounding: Decimal.ROUND_UP })
   const updated = new Decimal(number).toSignificantDigits(significantDigits)
-  return updated.toFormat(updated.decimalPlaces(), {groupSeparator: ''})
+  return updated.toFormat(updated.decimalPlaces(), { groupSeparator: '' })
 }
 
 export const formattedNum = (number, usd = false, acceptNegatives = false) => {
-  if(isNaN(number) || number === '' || number === undefined) {
+  if (isNaN(number) || number === '' || number === undefined) {
     return usd ? '$0' : 0
   }
   let num = parseFloat(number)
 
-  if(num > 500000000) {
+  if (num > 500000000) {
     return (usd ? '$' : '') + toK(num.toFixed(0), true)
   }
 
-  if(num === 0) {
-    if(usd) {
+  if (num === 0) {
+    if (usd) {
       return '$0'
     }
     return 0
   }
 
-  if(num < 0.0001 && num > 0) {
+  if (num < 0.0001 && num > 0) {
     return usd ? '< $0.0001' : '< 0.0001'
   }
 
-  if(num > 1000) {
+  if (num > 1000) {
     return usd ? formatDollarAmount(num, 0) : Number(parseFloat(num).toFixed(0)).toLocaleString()
   }
 
-  if(usd) {
-    if(num < 0.1) {
+  if (usd) {
+    if (num < 0.1) {
       return formatDollarAmount(num, 4)
     } else {
       return formatDollarAmount(num, 2)
@@ -390,10 +390,10 @@ export const formattedNum = (number, usd = false, acceptNegatives = false) => {
 
 export function rawPercent(percentRaw) {
   let percent = parseFloat(percentRaw * 100)
-  if(!percent || percent === 0) {
+  if (!percent || percent === 0) {
     return '0%'
   }
-  if(percent < 1 && percent > 0) {
+  if (percent < 1 && percent > 0) {
     return '< 1%'
   }
   return percent.toFixed(0) + '%'
@@ -401,11 +401,11 @@ export function rawPercent(percentRaw) {
 
 export function formattedPercent(percent, useBrackets = false) {
   percent = parseFloat(percent)
-  if(!percent || percent === 0) {
+  if (!percent || percent === 0) {
     return <Text fontWeight={500}>0%</Text>
   }
 
-  if(percent < 0.0001 && percent > 0) {
+  if (percent < 0.0001 && percent > 0) {
     return (
       <Text fontWeight={500} color="green">
         {'< 0.0001%'}
@@ -413,7 +413,7 @@ export function formattedPercent(percent, useBrackets = false) {
     )
   }
 
-  if(percent < 0 && percent > -0.0001) {
+  if (percent < 0 && percent > -0.0001) {
     return (
       <Text fontWeight={500} color="red">
         {'< 0.0001%'}
@@ -422,11 +422,11 @@ export function formattedPercent(percent, useBrackets = false) {
   }
 
   let fixedPercent = percent.toFixed(2)
-  if(fixedPercent === '0.00') {
+  if (fixedPercent === '0.00') {
     return '0%'
   }
-  if(fixedPercent > 0) {
-    if(fixedPercent > 100) {
+  if (fixedPercent > 0) {
+    if (fixedPercent > 100) {
       return <Text fontWeight={500} color="green">{`+${percent?.toFixed(0).toLocaleString()}%`}</Text>
     } else {
       return <Text fontWeight={500} color="green">{`+${fixedPercent}%`}</Text>
@@ -449,7 +449,7 @@ export const get2DayPercentChange = (valueNow, value24HoursAgo, value48HoursAgo)
 
   const adjustedPercentChange = (parseFloat(currentChange - previousChange) / parseFloat(previousChange)) * 100
 
-  if(isNaN(adjustedPercentChange) || !isFinite(adjustedPercentChange)) {
+  if (isNaN(adjustedPercentChange) || !isFinite(adjustedPercentChange)) {
     return [currentChange, 0]
   }
   return [currentChange, adjustedPercentChange]
@@ -463,7 +463,7 @@ export const get2DayPercentChange = (valueNow, value24HoursAgo, value48HoursAgo)
 export const getPercentChange = (valueNow, value24HoursAgo) => {
   const adjustedPercentChange =
     ((parseFloat(valueNow) - parseFloat(value24HoursAgo)) / parseFloat(value24HoursAgo)) * 100
-  if(isNaN(adjustedPercentChange) || !isFinite(adjustedPercentChange)) {
+  if (isNaN(adjustedPercentChange) || !isFinite(adjustedPercentChange)) {
     return 0
   }
   return adjustedPercentChange
@@ -472,12 +472,12 @@ export const getPercentChange = (valueNow, value24HoursAgo) => {
 export function isEquivalent(a, b) {
   var aProps = Object.getOwnPropertyNames(a)
   var bProps = Object.getOwnPropertyNames(b)
-  if(aProps.length !== bProps.length) {
+  if (aProps.length !== bProps.length) {
     return false
   }
-  for(var i = 0; i < aProps.length; i++) {
+  for (var i = 0; i < aProps.length; i++) {
     var propName = aProps[i]
-    if(a[propName] !== b[propName]) {
+    if (a[propName] !== b[propName]) {
       return false
     }
   }
