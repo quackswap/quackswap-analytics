@@ -8,7 +8,7 @@ import copy from 'copy-to-clipboard'
 export function useColor(tokenAddress, token) {
   const [color, setColor] = useState('#2172E5')
   if (tokenAddress) {
-    const path = `https://raw.githubusercontent.com/Apocentre/quackswap-assets/main/assets/${isAddress(tokenAddress)}/logo.png`
+    const path = `https://raw.githubusercontent.com/quackswap/quackswap-assets/main/assets/${isAddress(tokenAddress)}/logo.png`
     if (path) {
       Vibrant.from(path).getPalette((err, palette) => {
         if (palette && palette.Vibrant) {

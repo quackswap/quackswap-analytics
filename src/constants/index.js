@@ -13,7 +13,7 @@ export const timeframeOptions = {
 
 // token list urls to fetch tokens from - use for warnings on tokens and pairs
 export const SUPPORTED_LIST_URLS__NO_ENS = [
-  'https://raw.githubusercontent.com/Apocentre/quackswap-assets/main/tokenlist.json',
+  'https://raw.githubusercontent.com/quackswap/quackswap-assets/main/tokenlist.json',
   // 'https://www.coingecko.com/tokens_list/uniswap/defi_100/v_0_0_0.json',
 ]
 

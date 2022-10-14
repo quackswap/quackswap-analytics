@@ -71,7 +71,7 @@ export default function TokenLogo({ address, header = false, size = '24px', ...r
     )
   }
 
-  const path = `https://raw.githubusercontent.com/Apocentre/quackswap-assets/main/assets/${isAddress(address)}/logo.png`
+  const path = `https://raw.githubusercontent.com/quackswap/quackswap-assets/main/assets/${isAddress(address)}/logo.png`
 
   return (
     <Inline>
