@@ -164,11 +164,11 @@ function SideNav({ history }) {
           </AutoColumn>
           <AutoColumn gap="0.5rem" style={{ marginLeft: '.75rem', marginBottom: '4rem' }}>
             <HeaderText>
-              <Link href="https://quackswap.com" target="_blank">
-                QuackSwap.com
+              <Link href="https://quackswap.xyz" target="_blank">
+                QuackSwap.xyz
               </Link>
             </HeaderText>
-            <HeaderText>
+            {/* <HeaderText>
               <Link href="https://quackswap.com/docs" target="_blank">
                 Docs
               </Link>
@@ -182,7 +182,7 @@ function SideNav({ history }) {
               <Link href="#" target="_blank">
                 Twitter
               </Link>
-            </HeaderText>
+            </HeaderText> */}
             <Toggle isActive={isDark} toggle={toggleDarkMode} />
           </AutoColumn>
           {!below1180 && (
